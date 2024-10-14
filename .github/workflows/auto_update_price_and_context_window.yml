@@ -18,6 +18,8 @@ jobs:
           python ".github/workflows/auto_update_price_and_context_window_file.py"
       - name: Create Pull Request
         run: |
+          git config --global user.email "allen@test.com"
+          git config --global user.name "allen"
           git add model_prices_and_context_window.json 
           git commit -m "Update model_prices_and_context_window.json file: $(date +'%Y-%m-%d')" 
           gh pr create --title "Update model_prices_and_context_window.json file" \
