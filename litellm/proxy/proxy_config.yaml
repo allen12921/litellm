@@ -1,53 +1,17 @@
 model_list:
-  - model_name: gpt-4
+  - model_name: db-openai-endpoint
     litellm_params:
-      model: openai/fake
+      model: openai/gpt-4
       api_key: fake-key
       api_base: https://exampleopenaiendpoint-production.up.railway.app/
-  - model_name: fireworks-llama-v3-70b-instruct
-    litellm_params:
-      model: fireworks_ai/accounts/fireworks/models/llama-v3-70b-instruct
-      api_key: "os.environ/FIREWORKS"
-  - model_name: "*"
-    litellm_params:
-      model: "*"
-  - model_name: "*"
-    litellm_params:
-      model: openai/*
-      api_key: os.environ/OPENAI_API_KEY
-  - model_name: mistral-small-latest
-    litellm_params:
-      model: mistral/mistral-small-latest
-      api_key: "os.environ/MISTRAL_API_KEY"
-  - model_name: tts
-    litellm_params:
-      model: openai/tts-1
-      api_key: "os.environ/OPENAI_API_KEY"
-    model_info:
-      mode: audio_speech
-
-
-# for /files endpoints
-files_settings:
-  - custom_llm_provider: azure
-    api_base: https://exampleopenaiendpoint-production.up.railway.app
-    api_key: fake-key
-    api_version: "2023-03-15-preview"
-  - custom_llm_provider: openai
-    api_key: os.environ/OPENAI_API_KEY
-
-
-
-general_settings: 
-  master_key: sk-1234
-  pass_through_endpoints:
-    - path: "/v1/rerank"                                  # route you want to add to LiteLLM Proxy Server
-      target: "https://api.cohere.com/v1/rerank"          # URL this route should forward requests to
-      headers:                                            # headers to forward to this URL
-        content-type: application/json                    # (Optional) Extra Headers to pass to this endpoint 
-        accept: application/json
-      forward_headers: True
-
 
 litellm_settings:
-  callbacks: ["otel"] # 👈 KEY CHANGE
+  success_callback: ["s3"]
+  turn_off_message_logging: true
+  s3_callback_params:
+    s3_bucket_name: load-testing-oct   # AWS Bucket Name for S3
+    s3_region_name: us-west-2              # AWS Region Name for S3
+    s3_aws_access_key_id: os.environ/AWS_ACCESS_KEY_ID  # us os.environ/<variable name> to pass environment variables. This is AWS Access Key ID for S3
+    s3_aws_secret_access_key: os.environ/AWS_SECRET_ACCESS_KEY  # AWS Secret Access Key for S3
+
+
